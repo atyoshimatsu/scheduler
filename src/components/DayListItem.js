@@ -7,7 +7,7 @@ export default function DayListItem(props) {
     'day-list__item',
     { 'day-list__item--selected': props.selected },
     { 'day-list__item--full': props.spot === 0 }
-);
+  );
 
   return (
     <li onClick={() => props.setDay(props.name)} className={dayListItemClass}>
