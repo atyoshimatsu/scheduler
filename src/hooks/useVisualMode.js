@@ -26,5 +26,5 @@ export default function useVisualMode (inital) {
     setHistory(history.filter((h, index) => index !== history.length - 1));
   }
 
-  return { mode, transition, back } ;
+  return { mode, transition, back };
 };
