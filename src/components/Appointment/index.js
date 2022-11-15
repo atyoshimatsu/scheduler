@@ -31,9 +31,11 @@ function Appointment(props) {
     });
   }
 
-  function remove(id) {
-    console.log(id);
+  function remove() {
     transition(DELETING);
+    bookInterview(id, null).then(res => {
+      transition(EMPTY);
+    });
   };
 
   return (
@@ -42,7 +44,6 @@ function Appointment(props) {
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW &&
         <Show
-            id={id}
             student={interview.student}
             interviewer={interview.interviewer}
             onDelete={remove}
