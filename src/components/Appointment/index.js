@@ -9,6 +9,7 @@ import useVisualMode from 'hooks/useVisualMode';
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
+const SAVING = "SAVING";
 
 function Appointment(props) {
   const { mode, transition, back} = useVisualMode(
@@ -22,6 +23,7 @@ function Appointment(props) {
       student: name,
       interviewer
     };
+    transition(SAVING);
     bookInterview(id, interview).then(res => {
       transition(SHOW);
     });
