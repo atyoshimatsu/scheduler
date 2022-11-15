@@ -35,6 +35,10 @@ export default function Application(props) {
   const dailyInterviewers = getInterviewersForDay(state, state.day);
 
   function bookInterview(id, interview) {
+    if (!interview) {
+      return axios.delete(`http://localhost:8001/api/appointments/${id}`);
+    }
+
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
