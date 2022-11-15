@@ -4,12 +4,14 @@ import Header from './Header';
 import Show from './Show';
 import Empty from './Empty';
 import Form from './Form';
+import Status from './Status';
 import useVisualMode from 'hooks/useVisualMode';
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
 const SAVING = "SAVING";
+const DELETING = "DELETING";
 
 function Appointment(props) {
   const { mode, transition, back} = useVisualMode(
@@ -29,14 +31,21 @@ function Appointment(props) {
     });
   }
 
+  function remove(id) {
+    console.log(id);
+    transition(DELETING);
+  };
+
   return (
     <article className="appointment">
       <Header time={time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW &&
         <Show
+            id={id}
             student={interview.student}
             interviewer={interview.interviewer}
+            onDelete={remove}
         />
       }
       {mode === CREATE &&
@@ -46,6 +55,8 @@ function Appointment(props) {
           onCancel={() => back(EMPTY)}
         />
       }
+      {mode === SAVING && <Status message={'Saving'} />}
+      {mode === DELETING && <Status message={'Deleting'} />}
     </article>
   );
 }
