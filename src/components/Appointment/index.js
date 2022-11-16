@@ -44,7 +44,7 @@ function Appointment(props) {
         transition(SHOW);
       })
       .catch(err => {
-        transition(ERROR_SAVE);
+        transition(ERROR_SAVE, true);
       });
   }
 
@@ -55,7 +55,7 @@ function Appointment(props) {
         transition(EMPTY);
       })
       .catch(err => {
-        transition(ERROR_DELETE);
+        transition(ERROR_DELETE, true);
       });
   };
 
