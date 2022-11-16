@@ -6,6 +6,7 @@ import Empty from './Empty';
 import Form from './Form';
 import Confirm from './Confirm';
 import Status from './Status';
+import Error from './Error';
 import useVisualMode from 'hooks/useVisualMode';
 
 const EMPTY = "EMPTY";
@@ -15,6 +16,8 @@ const EDIT = "EDIT";
 const CONFIRM = "CONFIRM";
 const SAVING = "SAVING";
 const DELETING = "DELETING";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 function Appointment(props) {
   const { mode, transition, back} = useVisualMode(
@@ -29,16 +32,24 @@ function Appointment(props) {
       interviewer
     };
     transition(SAVING);
-    bookInterview(id, interview).then(res => {
-      transition(SHOW);
-    });
+    bookInterview(id, interview)
+      .then(res => {
+        transition(SHOW);
+      })
+      .catch(err => {
+        transition(ERROR_SAVE);
+      });
   }
 
   function remove() {
     transition(DELETING);
-    bookInterview(id, null).then(res => {
-      transition(EMPTY);
-    });
+    bookInterview(id, null)
+      .then(res => {
+        transition(EMPTY);
+      })
+      .catch(err => {
+        transition(ERROR_DELETE);
+      });
   };
 
   return (
@@ -78,6 +89,18 @@ function Appointment(props) {
       }
       {mode === SAVING && <Status message={'Saving'} />}
       {mode === DELETING && <Status message={'Deleting'} />}
+      {mode === ERROR_SAVE &&
+        <Error
+          message={'Cound not save the appointment'}
+          onClose={() => transition(EMPTY)}
+        />
+      }
+      {mode === ERROR_DELETE &&
+        <Error
+          message={'Cound not cancel the appointment'}
+          onClose={() => transition(SHOW)}
+        />
+      }
     </article>
   );
 }
