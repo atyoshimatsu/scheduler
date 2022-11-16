@@ -24,7 +24,14 @@ function Appointment(props) {
     props.interview ? SHOW : EMPTY
   );
 
-  const { id, time, interview, interviewers, bookInterview } = props;
+  const {
+    id,
+    time,
+    interview,
+    interviewers,
+    bookInterview,
+    cancelInterview
+  } = props;
 
   function save(name, interviewer) {
     const interview = {
@@ -43,7 +50,7 @@ function Appointment(props) {
 
   function remove() {
     transition(DELETING);
-    bookInterview(id, null)
+    cancelInterview(id)
       .then(res => {
         transition(EMPTY);
       })
