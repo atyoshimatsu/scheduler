@@ -68,7 +68,7 @@ function Appointment(props) {
         <Form
           interviewers={interviewers}
           onSave={save}
-          onCancel={() => back(EMPTY)}
+          onCancel={() => back()}
         />
       }
       {mode === EDIT &&
@@ -77,14 +77,14 @@ function Appointment(props) {
           interviewer={interview.interviewer.id}
           interviewers={interviewers}
           onSave={save}
-          onCancel={() => back(EMPTY)}
+          onCancel={() => back()}
         />
       }
       {mode === CONFIRM &&
         <Confirm
           message={'Are you sure you would like to delete?'}
           onConfirm={remove}
-          onCancel={() => back(EMPTY)}
+          onCancel={() => back()}
         />
       }
       {mode === SAVING && <Status message={'Saving'} />}
