@@ -8,16 +8,17 @@ import Confirm from './Confirm';
 import Status from './Status';
 import Error from './Error';
 import useVisualMode from 'hooks/useVisualMode';
-
-const EMPTY = "EMPTY";
-const SHOW = "SHOW";
-const CREATE = "CREATE";
-const EDIT = "EDIT";
-const CONFIRM = "CONFIRM";
-const SAVING = "SAVING";
-const DELETING = "DELETING";
-const ERROR_SAVE = "ERROR_SAVE";
-const ERROR_DELETE = "ERROR_DELETE";
+import {
+  EMPTY,
+  SHOW,
+  CREATE,
+  EDIT,
+  CONFIRM,
+  SAVING,
+  DELETING,
+  ERROR_SAVE,
+  ERROR_DELETE
+} from '../../constants/constants';
 
 function Appointment(props) {
   const { mode, transition, back} = useVisualMode(
@@ -33,13 +34,13 @@ function Appointment(props) {
     cancelInterview
   } = props;
 
-  function save(name, interviewer) {
+  function save(name, interviewer, mode) {
     const interview = {
       student: name,
       interviewer
     };
     transition(SAVING);
-    bookInterview(id, interview)
+    bookInterview(id, interview, mode)
       .then(res => {
         transition(SHOW);
       })
@@ -76,6 +77,7 @@ function Appointment(props) {
           interviewers={interviewers}
           onSave={save}
           onCancel={() => back()}
+          mode={mode}
         />
       }
       {mode === EDIT &&
@@ -85,6 +87,7 @@ function Appointment(props) {
           interviewers={interviewers}
           onSave={save}
           onCancel={() => back()}
+          mode={mode}
         />
       }
       {mode === CONFIRM &&
