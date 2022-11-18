@@ -21,10 +21,6 @@ import {
 } from '../../constants/constants';
 
 function Appointment(props) {
-  const { mode, transition, back} = useVisualMode(
-    props.interview ? SHOW : EMPTY
-  );
-
   const {
     id,
     time,
@@ -33,6 +29,10 @@ function Appointment(props) {
     bookInterview,
     cancelInterview
   } = props;
+
+  const { mode, transition, back} = useVisualMode(
+    interview ? SHOW : EMPTY
+  );
 
   function save(name, interviewer, mode) {
     const interview = {
