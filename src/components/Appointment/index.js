@@ -29,8 +29,7 @@ function Appointment(props) {
     bookInterview,
     cancelInterview
   } = props;
-
-  const { mode, transition, back} = useVisualMode(
+  const { mode, transition, back } = useVisualMode(
     interview ? SHOW : EMPTY
   );
 
@@ -66,10 +65,10 @@ function Appointment(props) {
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW &&
         <Show
-            student={interview.student}
-            interviewer={interview.interviewer}
-            onEdit={() => transition(EDIT)}
-            onDelete={() => transition(CONFIRM)}
+          student={interview.student}
+          interviewer={interview.interviewer}
+          onEdit={() => transition(EDIT)}
+          onDelete={() => transition(CONFIRM)}
         />
       }
       {mode === CREATE &&
