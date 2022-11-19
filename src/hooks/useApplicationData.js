@@ -5,6 +5,7 @@ import {
   SET_DAY,
   SET_APPLICATION_DATA,
   SET_INTERVIEW,
+  SET_SPOTS,
 } from '../constants/constants';
 
 function useApplicationData() {
@@ -14,14 +15,14 @@ function useApplicationData() {
         return {
           ...state,
           day: action.day,
-        }
+        };
       case SET_APPLICATION_DATA:
         return {
           ...state,
           days: action.days,
           appointments: action.appointments,
           interviewers: action.interviewers,
-        }
+        };
       case SET_INTERVIEW:
         return {
           ...state,
@@ -32,7 +33,19 @@ function useApplicationData() {
               interview: action.interview,
             }
           }
-        }
+        };
+      case SET_SPOTS:
+        const dayIndex = state.days.map(day => day.name).indexOf(state.day);
+        const newDay = {
+          ...state.days[dayIndex],
+          spots: action.mode === CREATE ? state.days[dayIndex].spots - 1 : state.days[dayIndex].spots + 1,
+        };
+        const newDays = state.days.map(day => day.id === newDay.id ? newDay : day);
+
+        return {
+          ...state,
+          days: newDays,
+        };
       default:
         throw new Error(
           `Tried to reduce with unsupported action type: ${action.type}`
@@ -71,20 +84,8 @@ function useApplicationData() {
     };
     const appointments = {
       ...state.appointments,
-      [id]: appointment
+      [id]: appointment,
     };
-
-    const dayIndex = state.days.map(day => day.name).indexOf(state.day);
-    const newDay = {
-      ...state.days[dayIndex],
-      spots: mode === CREATE ? state.days[dayIndex].spots - 1 : state.days[dayIndex].spots,
-    }
-    const newDays = state.days.map(day => {
-      if(day.id === newDay.id) {
-        return newDay;
-      }
-      return day;
-    })
 
     return axios.put(`/api/appointments/${id}`, {
       ...appointment
@@ -92,7 +93,7 @@ function useApplicationData() {
       .then(res => {
         dispath({
           type: SET_APPLICATION_DATA,
-          days: newDays,
+          days: state.days,
           appointments,
           interviewers: state.interviewers,
         });
@@ -101,34 +102,25 @@ function useApplicationData() {
           id,
           interview,
         });
+        if (mode === CREATE) {
+          dispath({
+            type: SET_SPOTS,
+            mode: CREATE,
+          });
+        }
       });
   }
 
   function cancelInterview(id) {
-    const dayIndex = state.days.map(day => day.name).indexOf(state.day);
-    const newDay = {
-      ...state.days[dayIndex],
-      spots: state.days[dayIndex].spots + 1,
-    }
-    const newDays = state.days.map(day => {
-      if(day.id === newDay.id) {
-        return newDay;
-      }
-      return day;
-    })
-
     return axios.delete(`/api/appointments/${id}`)
       .then(res => {
-        dispath({
-          type: SET_APPLICATION_DATA,
-          days: newDays,
-          appointments: state.appointments,
-          interviewers: state.interviewers,
-        });
         dispath({
           type: SET_INTERVIEW,
           id,
           interview: null,
+        });
+        dispath({
+          type: SET_SPOTS,
         });
       });
   }
