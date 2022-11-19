@@ -53,22 +53,34 @@ function useApplicationData() {
     }
   }
 
-  const [state, dispath] = useReducer(reducer, {
+  const [state, dispatch] = useReducer(reducer, {
     day: 'Monday',
     days: [],
     appointments: {},
     interviewers: {},
   });
 
-  const setDay = day => dispath({ type: SET_DAY, day});
+  const setDay = day => dispatch({ type: SET_DAY, day });
 
   useEffect(() => {
+    const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+    ws.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      if (data.type === SET_INTERVIEW) {
+        dispatch({
+          type: SET_INTERVIEW,
+          id: data.id,
+          interview: data.interview ?? null,
+        });
+      }
+    };
+
     Promise.all([
       axios.get('/api/days'),
       axios.get('/api/appointments'),
       axios.get('/api/interviewers'),
     ]).then((all) => {
-      dispath({
+      dispatch({
         type: SET_APPLICATION_DATA,
         days: all[0].data,
         appointments: all[1].data,
@@ -91,19 +103,19 @@ function useApplicationData() {
       ...appointment
     })
       .then(res => {
-        dispath({
+        dispatch({
           type: SET_APPLICATION_DATA,
           days: state.days,
           appointments,
           interviewers: state.interviewers,
         });
-        dispath({
+        dispatch({
           type: SET_INTERVIEW,
           id,
           interview,
         });
         if (mode === CREATE) {
-          dispath({
+          dispatch({
             type: SET_SPOTS,
             mode: CREATE,
           });
@@ -114,12 +126,12 @@ function useApplicationData() {
   function cancelInterview(id) {
     return axios.delete(`/api/appointments/${id}`)
       .then(res => {
-        dispath({
+        dispatch({
           type: SET_INTERVIEW,
           id,
           interview: null,
         });
-        dispath({
+        dispatch({
           type: SET_SPOTS,
         });
       });
