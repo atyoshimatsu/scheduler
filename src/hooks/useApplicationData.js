@@ -27,7 +27,7 @@ function useApplicationData() {
           ...state,
           appointments: {
             ...state.appointments,
-            id: {
+            [action.id]: {
               ...state.appointments[action.id],
               interview: action.interview,
             }
