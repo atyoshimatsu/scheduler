@@ -19,6 +19,7 @@ import {
   ERROR_SAVE,
   ERROR_DELETE
 } from '../../constants/constants';
+import { useEffect } from 'react';
 
 function Appointment(props) {
   const {
@@ -29,9 +30,19 @@ function Appointment(props) {
     bookInterview,
     cancelInterview
   } = props;
+
   const { mode, transition, back } = useVisualMode(
     interview ? SHOW : EMPTY
   );
+
+  useEffect(() => {
+    if (interview && mode === EMPTY) {
+     transition(SHOW);
+    }
+    if (interview === null && mode === SHOW) {
+     transition(EMPTY);
+    }
+  }, [interview, transition, mode]);
 
   function save(name, interviewer, mode) {
     const interview = {
@@ -63,7 +74,7 @@ function Appointment(props) {
     <article className="appointment">
       <Header time={time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-      {mode === SHOW &&
+      {mode === SHOW && interview &&
         <Show
           student={interview.student}
           interviewer={interview.interviewer}
