@@ -1,11 +1,9 @@
 import { useEffect, useReducer } from 'react'
 import axios from "axios";
 import {
-  CREATE,
   SET_DAY,
   SET_APPLICATION_DATA,
   SET_INTERVIEW,
-  SET_SPOTS,
 } from '../constants/constants';
 
 function useApplicationData() {
@@ -24,8 +22,16 @@ function useApplicationData() {
           interviewers: action.interviewers,
         };
       case SET_INTERVIEW:
+        const presntDay = state.days.filter(day => day.appointments.includes(action.id))[0];
+        const newDay = {
+          ...presntDay,
+          spots: action.interview ? presntDay.spots - 1 : presntDay.spots + 1,
+        };
+        const newDays = state.days.map(day => day.id === newDay.id ? newDay : day);
+
         return {
           ...state,
+          days: newDays,
           appointments: {
             ...state.appointments,
             [action.id]: {
@@ -33,18 +39,6 @@ function useApplicationData() {
               interview: action.interview,
             }
           }
-        };
-      case SET_SPOTS:
-        const dayIndex = state.days.map(day => day.name).indexOf(state.day);
-        const newDay = {
-          ...state.days[dayIndex],
-          spots: action.mode === CREATE ? state.days[dayIndex].spots - 1 : state.days[dayIndex].spots + 1,
-        };
-        const newDays = state.days.map(day => day.id === newDay.id ? newDay : day);
-
-        return {
-          ...state,
-          days: newDays,
         };
       default:
         throw new Error(
@@ -94,47 +88,14 @@ function useApplicationData() {
       ...state.appointments[id],
       interview: { ...interview }
     };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
 
     return axios.put(`/api/appointments/${id}`, {
       ...appointment
-    })
-      .then(res => {
-        dispatch({
-          type: SET_APPLICATION_DATA,
-          days: state.days,
-          appointments,
-          interviewers: state.interviewers,
-        });
-        dispatch({
-          type: SET_INTERVIEW,
-          id,
-          interview,
-        });
-        if (mode === CREATE) {
-          dispatch({
-            type: SET_SPOTS,
-            mode: CREATE,
-          });
-        }
-      });
+    });
   }
 
   function cancelInterview(id) {
-    return axios.delete(`/api/appointments/${id}`)
-      .then(res => {
-        dispatch({
-          type: SET_INTERVIEW,
-          id,
-          interview: null,
-        });
-        dispatch({
-          type: SET_SPOTS,
-        });
-      });
+    return axios.delete(`/api/appointments/${id}`);
   }
 
   return {
