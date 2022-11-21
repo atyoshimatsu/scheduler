@@ -5,7 +5,12 @@
     "plugin:prettier/recommended",
     "prettier"
   ],
-  "plugins": ["prettier"],
+  "env": { "browser": true },
+  "ignorePatterns": ["node_modules/*", "build/*"],
+  "plugins": [
+    "prettier",
+    "flowtype"
+  ],
   "rules": {
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
@@ -29,6 +34,17 @@
     "sourceType": "module",
     "babelOptions": {
       "presets": ["@babel/preset-react"]
-   }
-  }
+    }
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/__tests__/*.js",
+        "**/*test.js"
+      ],
+      "env": {
+        "jest": true
+      }
+    }
+  ]
 }
