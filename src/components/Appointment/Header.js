@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react";
 
-function Header(props) {
+const Header = props => {
   const { time } = props;
   return (
     <header className="appointment__time">
@@ -8,6 +8,6 @@ function Header(props) {
       <hr className="appointment__separator" />
     </header>
   );
-}
+};
 
 export default Header;
