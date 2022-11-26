@@ -52,7 +52,6 @@ const useApplicationData = () => {
   const setDay = day => dispatch({ type: SET_DAY, day });
 
   useEffect(() => {
-    // eslint-disable-next-line no-undef
     const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
     ws.onmessage = e => {
       const data = JSON.parse(e.data);
