@@ -35,14 +35,14 @@ const Appointment = props => {
     }
   }, [interview, transition, mode]);
 
-  const save = (name, interviewer, mode) => {
+  const save = (name, interviewer) => {
     const interview = {
       student: name,
       interviewer,
     };
     transition(SAVING);
     /* eslint-disable no-unused-vars */
-    bookInterview(id, interview, mode)
+    bookInterview(id, interview)
       .then(res => {
         transition(SHOW);
       })
