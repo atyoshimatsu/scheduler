@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import InterviewerList from "components/InterviewerList";
 import Button from "components/Button";
 
@@ -6,16 +6,7 @@ const Form = props => {
   const { interviewers, onSave, onCancel } = props;
   const [student, setStudent] = useState(props.student || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
-  const [studentValidation, setstudentValidation] = useState("");
-  const [interviewerValidation, setinterviewerValidation] = useState("");
-
-  useEffect(() => {
-    setstudentValidation(!student ? "Student name cannot be blank" : "");
-  }, [student]);
-
-  useEffect(() => {
-    setinterviewerValidation(!interviewer ? "please select an interviewer" : "");
-  }, [interviewer]);
+  const [error, setError] = useState("");
 
   const reset = () => {
     setStudent("");
@@ -25,6 +16,20 @@ const Form = props => {
   const cancel = () => {
     reset();
     onCancel();
+  };
+
+  const validation = () => {
+    if (!student) {
+      setError("Student name cannot be blank");
+      return;
+    }
+
+    if (!interviewer) {
+      setError("Please select an interviewer");
+      return;
+    }
+
+    onSave(student, interviewer);
   };
 
   return (
@@ -41,24 +46,19 @@ const Form = props => {
             data-testid="student-name-input"
           />
         </form>
-        <div className="appointment__validation">{studentValidation}</div>
+        <div className="appointment__validation">{error}</div>
         <InterviewerList
           interviewers={interviewers}
           onChange={setInterviewer}
           value={interviewer}
         />
-        <div className="appointment__validation">{interviewerValidation}</div>
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
           <Button danger onClick={cancel}>
             Cancel
           </Button>
-          <Button
-            confirm
-            onClick={() => onSave(student, interviewer)}
-            disabled={!student || !interviewer}
-          >
+          <Button confirm onClick={() => validation()}>
             Save
           </Button>
         </section>
