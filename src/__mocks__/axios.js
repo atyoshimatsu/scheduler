@@ -1,5 +1,3 @@
-import jest from "jest";
-
 const fixtures = {
   days: [
     {
@@ -56,6 +54,8 @@ const fixtures = {
 };
 
 export default {
+  defaults: { baseURL: "" },
+  // eslint-disable-next-line
   get: jest.fn(url => {
     switch (url) {
       case "/api/days": {
