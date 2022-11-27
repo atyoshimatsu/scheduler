@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
 import axios from "axios";
-import { SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW } from "../constants/constants";
+import { SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW, SET_DAYS } from "../constants/constants";
 
 const useApplicationData = () => {
   const reducer = (state, action) => {
@@ -10,7 +10,7 @@ const useApplicationData = () => {
           ...presentDay,
           spots: Object.values(state.appointments).filter(
             appointment =>
-              !appointment.interview && presentDay.appointments.includes(appointment.id)
+              appointment.interview === null && presentDay.appointments.includes(appointment.id)
           ).length,
         }
       : {};
@@ -32,7 +32,6 @@ const useApplicationData = () => {
       case SET_INTERVIEW:
         return {
           ...state,
-          days: newDays,
           appointments: {
             ...state.appointments,
             [action.id]: {
@@ -40,6 +39,11 @@ const useApplicationData = () => {
               interview: action.interview,
             },
           },
+        };
+      case SET_DAYS:
+        return {
+          ...state,
+          days: newDays,
         };
       default:
         throw new Error(`Tried to reduce with unsupported action type: ${action.type}`);
@@ -63,6 +67,10 @@ const useApplicationData = () => {
         type: SET_INTERVIEW,
         id: data.id,
         interview: data.interview ?? null,
+      });
+      dispatch({
+        type: SET_DAYS,
+        id: data.id,
       });
     }
   };
@@ -88,6 +96,10 @@ const useApplicationData = () => {
       id,
       interview: interview ?? null,
     });
+    dispatch({
+      type: SET_DAYS,
+      id,
+    });
 
     const appointment = {
       ...state.appointments[id],
@@ -104,6 +116,10 @@ const useApplicationData = () => {
       type: SET_INTERVIEW,
       id,
       interview: null,
+    });
+    dispatch({
+      type: SET_DAYS,
+      id,
     });
 
     return axios.delete(`/api/appointments/${id}`);
