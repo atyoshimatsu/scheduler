@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "components/Appointment/styles.scss";
 import useVisualMode from "hooks/useVisualMode";
 import Header from "./Header";
@@ -19,11 +19,9 @@ import {
   ERROR_SAVE,
   ERROR_DELETE,
 } from "../../constants/constants";
-import { useEffect } from "react";
 
 const Appointment = props => {
   const { id, time, interview, interviewers, bookInterview, cancelInterview } = props;
-
   const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY);
 
   useEffect(() => {
@@ -64,7 +62,7 @@ const Appointment = props => {
   };
 
   return (
-    <article className="appointment">
+    <article className="appointment" data-testid="appointment">
       <Header time={time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
       {mode === SHOW && interview && (
