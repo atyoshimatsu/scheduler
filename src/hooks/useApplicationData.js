@@ -8,10 +8,14 @@ const useApplicationData = () => {
     const newDay = presentDay
       ? {
           ...presentDay,
-          spots: action.interview ? presentDay.spots - 1 : presentDay.spots + 1,
+          spots: Object.values(state.appointments).filter(
+            appointment =>
+              !appointment.interview && presentDay.appointments.includes(appointment.id)
+          ).length,
         }
       : {};
     const newDays = state.days.map(day => (day.id === newDay.id ? newDay : day));
+
     switch (action.type) {
       case SET_DAY:
         return {
@@ -51,19 +55,19 @@ const useApplicationData = () => {
 
   const setDay = day => dispatch({ type: SET_DAY, day });
 
-  useEffect(() => {
-    const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
-    ws.onmessage = e => {
-      const data = JSON.parse(e.data);
-      if (data.type === SET_INTERVIEW) {
-        dispatch({
-          type: SET_INTERVIEW,
-          id: data.id,
-          interview: data.interview ?? null,
-        });
-      }
-    };
+  const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+  ws.onmessage = e => {
+    const data = JSON.parse(e.data);
+    if (data.type === SET_INTERVIEW) {
+      dispatch({
+        type: SET_INTERVIEW,
+        id: data.id,
+        interview: data.interview ?? null,
+      });
+    }
+  };
 
+  useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
       axios.get("/api/appointments"),
@@ -79,6 +83,12 @@ const useApplicationData = () => {
   }, []);
 
   const bookInterview = (id, interview) => {
+    dispatch({
+      type: SET_INTERVIEW,
+      id,
+      interview: interview ?? null,
+    });
+
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview },
@@ -90,6 +100,12 @@ const useApplicationData = () => {
   };
 
   const cancelInterview = id => {
+    dispatch({
+      type: SET_INTERVIEW,
+      id,
+      interview: null,
+    });
+
     return axios.delete(`/api/appointments/${id}`);
   };
 
