@@ -91,38 +91,44 @@ const useApplicationData = () => {
   }, []);
 
   const bookInterview = (id, interview) => {
-    dispatch({
-      type: SET_INTERVIEW,
-      id,
-      interview: interview ?? null,
-    });
-    dispatch({
-      type: SET_DAYS,
-      id,
-    });
-
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview },
     };
 
-    return axios.put(`/api/appointments/${id}`, {
-      ...appointment,
-    });
+    return (
+      axios
+        .put(`/api/appointments/${id}`, {
+          ...appointment,
+        })
+        // eslint-disable-next-line
+      .then(res => {
+          dispatch({
+            type: SET_INTERVIEW,
+            id,
+            interview: interview ?? null,
+          });
+          dispatch({
+            type: SET_DAYS,
+            id,
+          });
+        })
+    );
   };
 
   const cancelInterview = id => {
-    dispatch({
-      type: SET_INTERVIEW,
-      id,
-      interview: null,
+    // eslint-disable-next-line
+    return axios.delete(`/api/appointments/${id}`).then(res => {
+      dispatch({
+        type: SET_INTERVIEW,
+        id,
+        interview: null,
+      });
+      dispatch({
+        type: SET_DAYS,
+        id,
+      });
     });
-    dispatch({
-      type: SET_DAYS,
-      id,
-    });
-
-    return axios.delete(`/api/appointments/${id}`);
   };
 
   return {
