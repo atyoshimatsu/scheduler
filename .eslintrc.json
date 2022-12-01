@@ -2,7 +2,7 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/jsx-runtime",
-    "cypress/recommended",
+    "plugin:cypress/recommended",
     "plugin:prettier/recommended",
     "prettier"
   ],
@@ -10,7 +10,8 @@
   "ignorePatterns": ["node_modules/*", "build/*"],
   "plugins": [
     "prettier",
-    "flowtype"
+    "flowtype",
+    "cypress"
   ],
   "rules": {
     "react/jsx-uses-react": "error",
