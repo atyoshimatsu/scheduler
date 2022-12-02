@@ -42,3 +42,4 @@ npm run storybook
 - Updating spots remaining with reducers
 - Connecting to a Web a WebSocket Server
 - Create constants file to manage constant variables
+- Setting up ESlint and babel
