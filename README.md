@@ -15,9 +15,9 @@ Interview Scheduler is an app that manages interviewers and interviewees using R
 ## Getting Started
 1. Clone your repository onto your local device.
 2. Install dependencies using the `npm install` command.
-3. Start the web server using the `npm run start` command. The app will be served at <http://localhost:8080/>.
+3. Start the web server using the `npm run start` command. The app will be served at <http://localhost:8000/>.
 4. Also needed to be run API server on port 8001.
-5. Go to <http://localhost:8080/> in your browser.
+5. Go to <http://localhost:8000/> in your browser.
 
 ## Running Webpack Development Server
 
