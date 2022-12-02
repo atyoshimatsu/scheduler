@@ -12,10 +12,6 @@ Interview Scheduler is an app that manages interviewers and interviewees using R
 #### Delete an interview
 !["Screenshot of deleting an interview"](https://github.com/atyoshimatsu/scheduler/blob/feature/readme/docs/delete_demo.gif)
 
-## Setup
-
-Install dependencies with `npm install`.
-
 ## Getting Started
 1. Clone your repository onto your local device.
 2. Install dependencies using the `npm install` command.
