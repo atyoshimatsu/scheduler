@@ -2,6 +2,7 @@ import { useEffect, useReducer } from "react";
 import axios from "axios";
 import { SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW, SET_DAYS } from "../constants/constants";
 import reducer from "reducers/application";
+import useAutoUpdate from "./useAutoUpdate";
 
 const useApplicationData = () => {
   const [state, dispatch] = useReducer(reducer, {
@@ -12,22 +13,6 @@ const useApplicationData = () => {
   });
 
   const setDay = day => dispatch({ type: SET_DAY, day });
-
-  const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
-  ws.onmessage = e => {
-    const data = JSON.parse(e.data);
-    if (data.type === SET_INTERVIEW) {
-      dispatch({
-        type: SET_INTERVIEW,
-        id: data.id,
-        interview: data.interview ?? null,
-      });
-      dispatch({
-        type: SET_DAYS,
-        id: data.id,
-      });
-    }
-  };
 
   useEffect(() => {
     Promise.all([
@@ -43,6 +28,8 @@ const useApplicationData = () => {
       });
     });
   }, []);
+
+  useAutoUpdate(dispatch);
 
   const bookInterview = (id, interview) => {
     const appointment = {
