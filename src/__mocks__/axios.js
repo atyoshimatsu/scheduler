@@ -1,3 +1,5 @@
+import { jest } from "@jest/globals";
+
 const fixtures = {
   days: [
     {
@@ -55,7 +57,6 @@ const fixtures = {
 
 export default {
   defaults: { baseURL: "" },
-  // eslint-disable-next-line
   get: jest.fn(url => {
     switch (url) {
       case "/api/days": {
@@ -81,11 +82,11 @@ export default {
       }
     }
   }),
-  // eslint-disable-next-line
+
   put: jest.fn(() => {
     return Promise.resolve({ status: 204, statusText: "No Content" });
   }),
-  // eslint-disable-next-line
+
   delete: jest.fn(() => {
     return Promise.resolve({ status: 204, statusText: "No Content" });
   }),

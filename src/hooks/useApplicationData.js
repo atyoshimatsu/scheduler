@@ -37,29 +37,25 @@ const useApplicationData = () => {
       interview: { ...interview },
     };
 
-    return (
-      axios
-        .put(`/api/appointments/${id}`, {
-          ...appointment,
-        })
-        // eslint-disable-next-line
-      .then(res => {
-          dispatch({
-            type: SET_INTERVIEW,
-            id,
-            interview: interview ?? null,
-          });
-          dispatch({
-            type: SET_DAYS,
-            id,
-          });
-        })
-    );
+    return axios
+      .put(`/api/appointments/${id}`, {
+        ...appointment,
+      })
+      .then(() => {
+        dispatch({
+          type: SET_INTERVIEW,
+          id,
+          interview: interview ?? null,
+        });
+        dispatch({
+          type: SET_DAYS,
+          id,
+        });
+      });
   };
 
   const cancelInterview = id => {
-    // eslint-disable-next-line
-    return axios.delete(`/api/appointments/${id}`).then(res => {
+    return axios.delete(`/api/appointments/${id}`).then(() => {
       dispatch({
         type: SET_INTERVIEW,
         id,
