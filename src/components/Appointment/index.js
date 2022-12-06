@@ -39,12 +39,11 @@ const Appointment = props => {
       interviewer,
     };
     transition(SAVING);
-    /* eslint-disable no-unused-vars */
     bookInterview(id, interview)
-      .then(res => {
+      .then(() => {
         transition(SHOW);
       })
-      .catch(err => {
+      .catch(() => {
         transition(ERROR_SAVE, true);
       });
   };
@@ -52,10 +51,10 @@ const Appointment = props => {
   const remove = () => {
     transition(DELETING);
     cancelInterview(id)
-      .then(res => {
+      .then(() => {
         transition(EMPTY);
       })
-      .catch(err => {
+      .catch(() => {
         transition(ERROR_DELETE, true);
       });
     /* eslint-enable no-unused-vars */
