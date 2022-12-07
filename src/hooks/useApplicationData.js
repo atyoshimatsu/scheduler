@@ -4,6 +4,12 @@ import { SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW, SET_DAYS } from "../const
 import reducer from "reducers/application";
 import useAutoUpdate from "./useAutoUpdate";
 
+/**
+ * @returns {Object} state
+ * @returns {dispatch} setDay
+ * @returns {Function} bookInterview
+ * @returns {Function} cancelInterview
+ */
 const useApplicationData = () => {
   const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
@@ -31,6 +37,11 @@ const useApplicationData = () => {
 
   useAutoUpdate(dispatch);
 
+  /**
+   * @param {number} id
+   * @param {Object} interview
+   * @returns {Promise} Try to put an appointment into the DB
+   */
   const bookInterview = (id, interview) => {
     const appointment = {
       ...state.appointments[id],
@@ -54,6 +65,10 @@ const useApplicationData = () => {
       });
   };
 
+  /**
+   * @param {number} id
+   * @returns {Promise} Try to delete an appointment from the DB
+   */
   const cancelInterview = id => {
     return axios.delete(`/api/appointments/${id}`).then(() => {
       dispatch({
