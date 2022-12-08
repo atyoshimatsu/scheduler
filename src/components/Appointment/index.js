@@ -95,7 +95,10 @@ const Appointment = props => {
       {mode === SAVING && <Status message={"Saving"} />}
       {mode === DELETING && <Status message={"Deleting"} />}
       {mode === ERROR_SAVE && (
-        <Error message={"Cound not save the appointment"} onClose={() => transition(EMPTY)} />
+        <Error
+          message={"Cound not save the appointment"}
+          onClose={() => transition(interview ? EDIT : CREATE)}
+        />
       )}
       {mode === ERROR_DELETE && (
         <Error message={"Cound not cancel the appointment"} onClose={() => transition(SHOW)} />
