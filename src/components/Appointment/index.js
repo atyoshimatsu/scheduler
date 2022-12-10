@@ -57,7 +57,6 @@ const Appointment = props => {
       .catch(() => {
         transition(ERROR_DELETE, true);
       });
-    /* eslint-enable no-unused-vars */
   };
 
   return (
