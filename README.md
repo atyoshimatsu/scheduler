@@ -71,7 +71,7 @@ npm run storybook
 - @testing-library/jest-dom
 - @testing-library/react
 - @testing-library/react-hooks
-- babel-loader
+- css-loade
 - eslint-plugin-cypress
 - eslint-plugin-flowtype
 - eslint-plugin-react
@@ -79,6 +79,8 @@ npm run storybook
 - prop-types
 - react-test-renderer
 - sass
+- sass-loader
+- style-load
 
 ## Stretch Features
 - Using Resucers
