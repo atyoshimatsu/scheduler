@@ -49,14 +49,16 @@
     "@testing-library/jest-dom": "^4.0.0",
     "@testing-library/react": "^8.0.7",
     "@testing-library/react-hooks": "^8.0.1",
-    "babel-loader": "^8.3.0",
+    "css-loader": "5.2.7",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-flowtype": "^8.0.3",
     "eslint-plugin-react": "^7.31.10",
     "prettier": "^2.7.1",
     "prop-types": "^15.8.1",
     "react-test-renderer": "^16.9.0",
-    "sass": "^1.53.0"
+    "sass": "^1.53.0",
+    "sass-loader": "10.1.1",
+    "style-loader": "2.0.0"
   },
   "jest": {
     "collectCoverageFrom": [
